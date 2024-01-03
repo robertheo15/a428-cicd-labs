@@ -8,5 +8,13 @@ node {
                 throw e
             }
         }
+        stage('Test') {
+            try {
+                sh './jenkins/scripts/test.sh' 
+            } catch (Exception e) {
+                currentBuild.result = 'FAILURE'
+                throw e
+            }
+        }
     }
 }
