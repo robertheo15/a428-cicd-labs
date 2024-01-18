@@ -30,6 +30,11 @@ pipeline {
                 }
             }
         }
+        stage('Manual Approval')  {         
+            checkout scm
+            // Menunggu input persetujuan dari pengguna         
+            input message: 'Lanjutkan ke tahap Deploy?', ok: 'Lanjutkan'     
+        }
         stage('Deliver') { 
             agent any
             environment { 
@@ -46,7 +51,8 @@ pipeline {
                 success {
                     archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals" 
                     sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
-                    sleep 60
+                    echo 'Sleep for 1 min'
+                    sleep time: 60, unit: 'SECONDS'
                 }
             }
         }
