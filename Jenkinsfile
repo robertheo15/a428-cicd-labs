@@ -31,7 +31,7 @@ pipeline {
             }
         }
         stage('Manual Approval')  {         
-            checkout scm
+            agent any
             // Menunggu input persetujuan dari pengguna         
             input message: 'Lanjutkan ke tahap Deploy?', ok: 'Lanjutkan'     
         }
