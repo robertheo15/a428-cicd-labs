@@ -26,10 +26,15 @@ pipeline {
                 }
             }
         }
-        stage('Manual Approval') {         
-            checkout scm         
-            // Menunggu input persetujuan dari pengguna         
-            input message: 'Lanjutkan ke tahap Deploy?', ok: 'Lanjutkan'     
+        stage('Manual Approval') {
+            steps {
+                script {
+                    def userInput = input(id: 'confirm', message: 'Lanjutkan ke tahap Deploy?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: '', name: 'confirm'] ])
+                    if(!userInput) {
+                        error('Deployment was not approved.')
+                    }
+                }
+            }
         }
         stage('Deliver') {
             agent {
